@@ -1,42 +1,58 @@
 import './App.css';
 import io from 'socket.io-client';
-import { createElement } from 'react';
+import { useState } from 'react';
 
 const socket = io('http://localhost:4000');
-const name = prompt("ypur name")
+const name = prompt("your name")
 socket.emit('new-user-joined', name)
 
 function App() {
-  // const [userJoined, setUserjoined] = useState("")
+  const [userJoined, setUserjoined] = useState([])
+  const [msgInput, setMsginput] = useState("")
+  const [msgReceive, setMsgreceive] = useState([])
 
-  
+  const submitForm = (e) => {
+    e.preventDefault()
+    if (msgInput === "") return;
+    socket.emit('send', msgInput);
+    setMsginput(" ");
+  }
+
   socket.on('user-joined', name => {
-    // greetingName(name)
+    setUserjoined([...userJoined, name])
+  })
+
+  socket.on('recieve', data => {
+    setMsgreceive([...msgReceive, data])
   })
   return (
     <>
       <div className='main'>
 
-        <div className="container receive">
-          <p>Hello. How are you today?</p>
+        <div className="container send">
+          <p>{msgInput}</p>
           <span className="time-right">11:00</span>
         </div>
 
-        <div className="container send">
-          <p>Hey! I'm fine. Thanks for asking!</p>
-          <span className="time-left">11:01</span>
-        </div>
+        {userJoined.map((user, index) => (
+          <div className="container send" key={index} >
+            <p>{user} joind the chat</p>
+          </div>
+        ))
 
-        <div className="container receive" >
-          <p>Sweet! So, what do you wanna do today?</p>
-          <span className="time-right">11:02</span>
-        </div>
-
-        <button>create div</button>
-      </div>
+        }
+        {
+          msgReceive.map((data, index) => (
+            <div className='container receive' key={index}>
+              <p>{data.name}:{data.message}</p>
+            </div>
+          ))
+        }
+      </div >
       <div className='msginput'>
-        <form >
-          <input />
+        <form onSubmit={submitForm} >
+          <input onChange={(e) =>
+            setMsginput(e.target.value)} />
           <button>send</button>
         </form>
       </div>
