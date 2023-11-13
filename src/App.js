@@ -5,17 +5,18 @@ import { useState } from 'react';
 const socket = io('http://localhost:4000');
 const name = prompt("your name")
 socket.emit('new-user-joined', name)
-
+localStorage.setItem('name', name)
 function App() {
   const [userJoined, setUserjoined] = useState([])
-  const [msgInput, setMsginput] = useState("")
+  const [msgSend, setMsgsend] = useState("")
   const [msgReceive, setMsgreceive] = useState([])
 
-  const submitForm = (e) => {
+  const handleSendMessage = (e) => {
     e.preventDefault()
-    if (msgInput === "") return;
-    socket.emit('send', msgInput);
-    setMsginput(" ");
+    if (msgSend === "") return;
+    socket.emit('send', msgSend);
+    setMsgreceive([...msgReceive, { message: msgSend, name: localStorage.getItem('name') }])
+    setMsgsend(" ");
   }
 
   socket.on('user-joined', name => {
@@ -26,38 +27,72 @@ function App() {
     setMsgreceive([...msgReceive, data])
   })
   return (
-    <>
-      <div className='main'>
+    <div className='chat'>
 
-        <div className="container send">
-          <p>{msgInput}</p>
-          <span className="time-right">11:00</span>
+      <div className="chat_sidebar">
+        <h2>Open Chat</h2>
+
+        <div>
+          <h4 className="chat_header">ACTIVE USERS</h4>
+          <div className="chat_users">
+            {userJoined.map((user, index) => (
+              <div className="container send" key={index} >
+                <p>{user}</p>
+              </div>
+            ))
+
+            }
+          </div>
+        </div>
+      </div>
+      <div className='chat_main'>
+
+        {/* <header className="chat__mainHeader">
+          <p>Hangout with Colleagues</p>
+          <button className="leaveChat__btn" >
+            LEAVE CHAT
+          </button>
+        </header> */}
+        <div className='message_container'>
+          {msgReceive.map((data, index) =>
+            data.name === localStorage.getItem('name') ? (
+              <div className="message_chats" key={index}>
+                <p className="sender_name">You</p>
+                <div className="message_sender">
+                  <p>{data.message}</p>
+                </div>
+              </div>
+            ) : (
+              <div className="message_chats" key={index}>
+                <p>{data.name}</p>
+                <div className="message_recipient">
+                  <p>{data.message}</p>
+                </div>
+              </div>
+            )
+          )}
+          {/*This is triggered when a user is typing*/}
+          <div className="message_status">
+            <p>Someone is typing...</p>
+          </div>
         </div>
 
-        {userJoined.map((user, index) => (
-          <div className="container send" key={index} >
-            <p>{user} joind the chat</p>
-          </div>
-        ))
-
-        }
-        {
-          msgReceive.map((data, index) => (
-            <div className='container receive' key={index}>
-              <p>{data.name}:{data.message}</p>
-            </div>
-          ))
-        }
+        <div className="chat_footer">
+          <form className="form" onSubmit={handleSendMessage}>
+            <input
+              type="text"
+              placeholder="Write message"
+              className="message"
+              value={msgSend}
+              onChange={(e) => setMsgsend(e.target.value)}
+            />
+            <button className="sendBtn">SEND</button>
+          </form>
+        </div>
       </div >
-      <div className='msginput'>
-        <form onSubmit={submitForm} >
-          <input onChange={(e) =>
-            setMsginput(e.target.value)} />
-          <button>send</button>
-        </form>
-      </div>
-    </>
-  );
+    </div>
+
+  )
 }
 
 export default App;
