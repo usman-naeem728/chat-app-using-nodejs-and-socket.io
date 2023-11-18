@@ -12,11 +12,12 @@ const io = require("socket.io")(server, {
   });
 
 const users = {}
+
 io.on('connection', (socket) => {
     console.log('A user connected');
     socket.on('new-user-joined', name =>{
         console.log('user', name)
-        users[socket.id] = name;
+        users[socket.id] = name
         socket.broadcast.emit('user-joined', name)
     });
     socket.on('send', message => {

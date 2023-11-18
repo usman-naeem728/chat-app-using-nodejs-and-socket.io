@@ -19,8 +19,8 @@ function App() {
     setMsgsend(" ");
   }
 
-  socket.on('user-joined', name => {
-    setUserjoined([...userJoined, name])
+  socket.on('user-joined', userData => {
+    setUserjoined([...userJoined, userData])
   })
 
   socket.on('recieve', data => {
@@ -36,12 +36,9 @@ function App() {
           <h4 className="chat_header">ACTIVE USERS</h4>
           <div className="chat_users">
             {userJoined.map((user, index) => (
-              <div className="container send" key={index} >
-                <p>{user}</p>
-              </div>
-            ))
-
-            }
+                  <p key={index}>{user} joined the chat</p>
+            ))}
+            {console.log(userJoined)}
           </div>
         </div>
       </div>
