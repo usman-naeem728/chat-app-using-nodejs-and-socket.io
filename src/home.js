@@ -5,10 +5,19 @@ const Home = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
 
+  const changeCase = (e) => {
+    e.preventDefault();
+    setUserName(e.target.value.toUpperCase());
+  };
+  const handleInput = (e) => {
+    e.preventDefault();
+    setUserName(e.target.value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     localStorage.setItem('userName', userName);
-    navigate('/chat');
+    navigate('/');
     window.location.reload()
   };
   return (
@@ -17,14 +26,15 @@ const Home = () => {
       <label htmlFor="username">Username</label>
       <input
         type="text"
-        minLength={6}
+        minLength={5}
         name="username"
         id="username"
         className="username__input"
         value={userName}
-        onChange={(e) => setUserName(e.target.value)}
+        onChange={handleInput}
+        onMouseEnter={changeCase}
       />
-      <button className="home__cta" disabled={userName.length < 5 ? true : false }>SIGN IN</button>
+      <button className="home__cta" disabled={userName.length < 5 ? true : false}>SIGN IN</button>
     </form>
   );
 };
