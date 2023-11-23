@@ -17,15 +17,18 @@ function Chat() {
     const [userJoined, setUserjoined] = useState([])
     const [msgSend, setMsgsend] = useState("")
     const [msgReceive, setMsgreceive] = useState([])
-
+    const [typingStatus, setTypingStatus] = useState('');
     const state = {
         audio: new Audio(audio)
     }
-   
-   
 
-    
 
+
+
+
+    useEffect(() => {
+        socket.on('typingResponse', (data) => setTypingStatus(data));
+    }, [socket]);
 
     const handleSendMessage = (e) => {
         e.preventDefault()
@@ -54,13 +57,16 @@ function Chat() {
         state.audio.play()
     })
 
+    const handleTyping = () =>
+        socket.emit('typing', `${localStorage.getItem('userName')} is typing`);
 
     return (
         <>
             <div className='chat'>
 
+
                 <div className="chat_sidebar">
-                    
+
                     <h2>YOU: {localStorage.getItem('userName')}</h2>
 
                     <div>
@@ -71,18 +77,12 @@ function Chat() {
 
                             ))}
 
-                            {/* {console.log(userJoined)} */}
                         </div>
-                      
+
                     </div>
                 </div>
                 <div className='chat_main'>
-
-                    {/* <header className="chat__mainHeader">
-                    <button className="leaveChat__btn" onClick={handleLeave}>
-                        LEAVE CHAT
-                    </button>
-                </header> */}
+                   
                     <div className='message_container'>
                         {msgReceive.map((data, index) =>
                             data.name === localStorage.getItem('userName') ? (
@@ -103,7 +103,7 @@ function Chat() {
                         )}
                         {/*This is triggered when a user is typing*/}
                         <div className="message_status">
-                            <p>Someone is typing...</p>
+                            <p>{typingStatus}</p>
                         </div>
                     </div>
 
@@ -115,6 +115,7 @@ function Chat() {
                                 className="message"
                                 value={msgSend}
                                 onChange={(e) => setMsgsend(e.target.value)}
+                                onKeyDown={handleTyping}
                             />
                             <button className="sendBtn">SEND</button>
                         </form>

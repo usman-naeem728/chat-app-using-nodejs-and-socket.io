@@ -32,7 +32,8 @@ const Home = () => {
         className="username__input"
         value={userName}
         onChange={handleInput}
-        onMouseEnter={changeCase}
+        onMouseLeave={changeCase}
+        
       />
       <button className="home__cta" disabled={userName.length < 5 ? true : false}>SIGN IN</button>
     </form>
