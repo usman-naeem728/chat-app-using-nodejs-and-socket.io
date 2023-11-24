@@ -41,11 +41,15 @@ function Chat() {
     // const handleLeave = () =>{
     //     const name = localStorage.getItem('userName')
     //     socket.emit('new-user-disconnect', name)
-    //     localStorage.removeItem('userName')
     //     navigate('/')
     //     // window.location.reload()
-
+    
     // }
+    window.addEventListener('beforeunload', function (e) {
+        e.preventDefault();
+        localStorage.removeItem('userName')
+        e.returnValue = '';
+    });
 
     socket.on('user-joined', userData => {
         setUserjoined([...userJoined, userData])
@@ -82,7 +86,7 @@ function Chat() {
                     </div>
                 </div>
                 <div className='chat_main'>
-                   
+
                     <div className='message_container'>
                         {msgReceive.map((data, index) =>
                             data.name === localStorage.getItem('userName') ? (
