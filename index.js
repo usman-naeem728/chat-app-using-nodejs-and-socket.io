@@ -10,7 +10,7 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"]
   }
 });
-
+const port = process.env.PORT || 4000;
 const users = {}
 
 io.on('connection', (socket) => {
@@ -29,4 +29,4 @@ io.on('connection', (socket) => {
 });
 
 
-server.listen(4000);
+server.listen(port);

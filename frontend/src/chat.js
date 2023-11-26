@@ -121,7 +121,7 @@ function Chat() {
                                 onChange={(e) => setMsgsend(e.target.value)}
                                 onKeyDown={handleTyping}
                             />
-                            <button className="sendBtn">SEND</button>
+                            <button className="sendBtn" disabled={msgSend === " "? true : false}>SEND</button>
                         </form>
                     </div>
                 </div >
