@@ -6,11 +6,16 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://chat-app-ntjl.onrender.com",
     methods: ["GET", "POST"]
   }
 });
-const port = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
+
+// app.get('/', (req, res) => {
+//     res.write(`<h1>Socket IO Start on Port : ${PORT}</h1>`);
+//     res.end();
+// });
 const users = {}
 
 io.on('connection', (socket) => {
@@ -29,4 +34,4 @@ io.on('connection', (socket) => {
 });
 
 
-server.listen(port);
+server.listen(PORT);
