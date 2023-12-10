@@ -12,10 +12,10 @@ const io = require("socket.io")(server, {
 });
 const PORT = process.env.PORT || 4000;
 
-// app.get('/', (req, res) => {
-//     res.write(`<h1>Socket IO Start on Port : ${PORT}</h1>`);
-//     res.end();
-// });
+app.get('/', (req, res) => {
+    res.write(`<h1>Socket IO Start on Port : ${PORT}</h1>`);
+    res.end();
+});
 const users = {}
 
 io.on('connection', (socket) => {
