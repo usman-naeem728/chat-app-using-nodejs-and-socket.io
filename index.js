@@ -5,10 +5,10 @@ const cors = require('cors')
 const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
-  // cors: {
-  //   origin: "https://chat-app-ntjl.onrender.com",
-  //   methods: ["GET", "POST"]
-  // }
+  cors: {
+    origin: "https://chatapp-socket.web.app/",
+    methods: ["GET", "POST"]
+  }
 });
 const PORT = process.env.PORT || 4000;
 
