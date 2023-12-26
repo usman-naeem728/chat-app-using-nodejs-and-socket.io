@@ -6,11 +6,12 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "https://chatapp-socket.web.app/",
+    origin: "http://localhost:3001",
     methods: ["GET", "POST"]
   }
 });
-const PORT = process.env.PORT || 4000;
+const port = 3000
+// const PORT =  4000;
 
 // app.get('/', (req, res) => {
 //     res.write(`<h1>Socket IO Start on Port : ${PORT}</h1>`);
@@ -34,4 +35,6 @@ io.on('connection', (socket) => {
 });
 
 
-server.listen(PORT);
+server.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})

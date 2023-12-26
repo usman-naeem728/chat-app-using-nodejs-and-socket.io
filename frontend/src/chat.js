@@ -4,7 +4,7 @@ import { useState } from 'react';
 import audio from "./ting.mp3"
 
 
-const socket = io('https://chat-app-ntjl.onrender.com/');
+const socket = io('http://localhost:3000');
 let i;
 for (i = 0; i < localStorage.length; i++) {
     let findingName = localStorage.key(i);
